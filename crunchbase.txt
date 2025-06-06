@@ -1,0 +1,46 @@
+--crunchbase
+chat ul ne da cu selenium from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+import time
+
+def main():
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')  # Rulează browserul în mod headless (fără interfață grafică)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    driver.get("https://www.crunchbase.com/organization/ibm")
+    time.sleep(10)  # Așteaptă ca pagina să se încarce complet
+
+    try:
+        location = driver.find_element(By.XPATH, '//span[contains(@class,"identifier-multi")]').text
+        print("Locație:", location)
+    except:
+        print("Locație: Informație indisponibilă")
+
+    try:
+        employees = driver.find_element(By.XPATH, '//a[contains(@href,"num_employees_enum")]').text
+        print("Număr de angajați:", employees)
+    except:
+        print("Număr de angajați: Informație indisponibilă")
+
+    try:
+        website = driver.find_element(By.XPATH, '//a[contains(@data-testid,"profile-website")]').text
+        print("Website:", website)
+    except:
+        print("Website: Informație indisponibilă")
+
+    try:
+        funding = driver.find_element(By.XPATH, '//span[contains(text(),"Total Funding Amount")]/following::span[1]').text
+        print("Total fonduri primite:", funding)
+    except:
+        print("Total fonduri primite: Informație indisponibilă")
+
+    driver.quit()
+
+if _name_ == '_main_':
+    main()
